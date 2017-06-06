@@ -9,3 +9,4 @@ ENV TERM xterm
 
 EXPOSE 80 
 VOLUME /home
+CMD ["nginx", "-g", "daemon off;"]
