@@ -1,23 +1,14 @@
-FROM dockerfile/ubuntu
+FROM centos:centos6
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
 
-# Install Nginx.
-RUN \
-  add-apt-repository -y ppa:nginx/stable && \
-  apt-get update && \
-  apt-get install -y nginx && \
-  rm -rf /var/lib/apt/lists/* && \
-  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  chown -R www-data:www-data /var/lib/nginx
+RUN yum -y update; yum clean all
+RUN yum -y install epel-release; yum clean all
+RUN yum -y install python-pip; yum clean all
 
-# Define mountable directories.
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html"]
+ADD . /src
 
-# Define working directory.
-WORKDIR /etc/nginx
+RUN cd /src; pip install -r requirements.txt
 
-# Define default command.
-CMD ["nginx"]
+EXPOSE 8080
 
-# Expose ports.
-EXPOSE 80
-EXPOSE 443
+CMD ["python", "/src/index.py"]
