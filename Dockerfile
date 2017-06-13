@@ -11,4 +11,5 @@ ENV TERM xterm
 
 
 EXPOSE 80 
+VOLUME /var
 CMD ["nginx", "-g", "daemon off;"]
